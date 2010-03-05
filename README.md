@@ -15,6 +15,7 @@ Put this somewhere like: `config/initializers/paddock.rb`
       enable  :door_locks,    :in => :development
       enable  :raptor_fences
       disable :cryo_security
+      disable :tyranosaur_fences, :in => :production
     end
 
 You name it, we got it.

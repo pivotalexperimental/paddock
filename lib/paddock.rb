@@ -3,22 +3,23 @@ module Paddock
   end
 
   class Feature
-    def self.add(name, envs)
+    def self.add(name, envs, disabled=false)
       @features ||= {}
-      @features[name] = new(name, envs)
+      @features[name] = new(name, envs, disabled)
     end
 
     def self.get(name)
       (@features ||= {})[name] || raise(Paddock::FeatureNotFound.new("#{name} is not a valid feature."))
     end
 
-    def initialize(name, envs)
-      @name, @envs = name, envs
+    def initialize(name, envs, disabled)
+      @name, @envs, @disabled = name, envs, disabled
     end
 
     def enabled?
-      return true if @envs == :all
-      Array(@envs).include?(Paddock.environment.to_sym)
+      result = true if @envs == :all
+      result ||= Array(@envs).include?(Paddock.environment.to_sym)
+      @disabled ? (!result) : result
     end
   end
 
@@ -38,8 +39,8 @@ module Paddock
     Paddock::Feature.add(name, (options[:in] || :all))
   end
 
-  def self.disable(name)
-    enable(name, :in => [])
+  def self.disable(name, options={})
+    Paddock::Feature.add(name, (options[:in] || :all), :disabled)
   end
 
   def feature(name)

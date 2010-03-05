@@ -100,7 +100,6 @@ describe Paddock('development') do
 
   describe "disabling features" do
     before(:each) do
-      Paddock.environment = 'production'
       Paddock('development') do
         disable :perimeter_fence
       end
@@ -114,6 +113,42 @@ describe Paddock('development') do
 
     it "returns false from the feature check" do
       feature(:perimeter_fence).should be_false
+    end
+  end
+
+  describe "disabling features in certain environments" do
+    before(:each) do
+      Paddock('production') do
+        disable :perimeter_fence, :in => :production
+      end
+    end
+
+    it "does not run the feature block when not in an appropriate environment" do
+      called = false
+      feature(:perimeter_fence) { called = true }
+      called.should be_false
+    end
+
+    it "returns false from the feature check" do
+      feature(:perimeter_fence).should be_false
+    end
+  end
+
+  describe "using disabled features in different environment" do
+    before(:each) do
+      Paddock('development') do
+        disable :perimeter_fence, :in => :production
+      end
+    end
+
+    it "does not run the feature block when not in an appropriate environment" do
+      called = false
+      feature(:perimeter_fence) { called = true }
+      called.should be_true
+    end
+
+    it "returns false from the feature check" do
+      feature(:perimeter_fence).should be_true
     end
   end
 end
