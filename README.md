@@ -6,9 +6,11 @@ Paddock is a feature switch system.
 
 Define which features should be used in certain environments.
 
-## Definition
+## Setup
 
 Put this somewhere like: `config/initializers/paddock.rb`
+
+    include Paddock
 
     Paddock(Rails.env) do
       enable  :phone_system,  :in => [:development, :test]
@@ -35,6 +37,8 @@ You name it, we got it.
 This is a unix system. I know this.
 
 ## Testing
+
+This might need some work.
 
 You can define which features are enabled in a test:
 
