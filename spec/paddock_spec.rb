@@ -54,6 +54,16 @@ describe Paddock('development') do
         it "returns true from the feature check" do
           feature(:perimeter_fence).should be_true
         end
+
+        it "is indifferent to strings/symbols" do
+          Paddock('development') do
+            enable :perimeter_fence, :in => 'development'
+          end
+
+          called = false
+          feature(:perimeter_fence) { called = true }
+          called.should be_true
+        end
       end
     end
 
@@ -77,6 +87,16 @@ describe Paddock('development') do
 
         it "returns true from the feature check" do
           feature(:perimeter_fence).should be_true
+        end
+
+        it "is indifferent to strings/symbols" do
+          Paddock('development') do
+            enable :perimeter_fence, :in => %w[development test]
+          end
+
+          called = false
+          feature(:perimeter_fence) { called = true }
+          called.should be_true
         end
       end
 
@@ -132,6 +152,16 @@ describe Paddock('development') do
     it "returns false from the feature check" do
       feature(:perimeter_fence).should be_false
     end
+
+    it "is indifferent to strings/symbols" do
+      Paddock('development') do
+        disable :perimeter_fence, :in => 'production'
+      end
+
+      called = false
+      feature(:perimeter_fence) { called = true }
+      called.should be_true
+    end
   end
 
   describe "using disabled features in different environment" do
@@ -149,6 +179,16 @@ describe Paddock('development') do
 
     it "returns false from the feature check" do
       feature(:perimeter_fence).should be_true
+    end
+
+    it "is indifferent to strings/symbols" do
+      Paddock('development') do
+        disable :perimeter_fence, :in => %w[production other]
+      end
+
+      called = false
+      feature(:perimeter_fence) { called = true }
+      called.should be_true
     end
   end
 end

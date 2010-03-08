@@ -18,7 +18,7 @@ module Paddock
 
     def enabled?
       result = true if @envs == :all
-      result ||= Array(@envs).include?(Paddock.environment.to_sym)
+      result ||= Array(@envs).map { |env| env.to_sym }.include?(Paddock.environment.to_sym)
       @disabled ? (!result) : result
     end
   end
