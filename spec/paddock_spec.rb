@@ -191,4 +191,21 @@ describe Paddock('development') do
       called.should be_true
     end
   end
+
+  describe "resetting changes" do
+    before(:each) do
+      Paddock('development') do
+        disable :disabled_feature
+        enable :enabled_feature
+      end
+    end
+
+    it "restores original feature behavior" do
+      Paddock.disable :enabled_feature
+      feature(:enabled_feature).should be_false
+
+      Paddock.reset!
+      feature(:enabled_feature).should be_true
+    end
+  end
 end

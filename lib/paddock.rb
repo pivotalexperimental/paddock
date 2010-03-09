@@ -32,7 +32,16 @@ module Paddock
   end
 
   def self.features(&block)
+    @block = block
     instance_eval(&block)
+  end
+
+  def self.reset!
+    if block = @block
+      features(&block)
+    else
+      raise "No paddock block defined!"
+    end
   end
 
   def self.enable(name, options={})
